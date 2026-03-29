@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Broke or Balling? — Reality > Delusion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #060608; --s1: #0d0d10; --s2: #131316; --s3: #1a1a1f;
+    --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.1);
+    --text: #efefef; --muted: #555; --muted2: #333;
+    --lime: #d4ff00; --lime-dim: rgba(212,255,0,0.12);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Syne', sans-serif; min-height: 100vh;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px; pointer-events: none;
+  }
+  .page { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; padding: 0 20px 100px; }
+
+  /* HERO */
+  .hero { padding: 56px 0 40px; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--lime-dim); border: 1px solid rgba(212,255,0,0.2);
+    border-radius: 100px; padding: 6px 14px 6px 10px; margin-bottom: 24px;
+  }
+  .hero-tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--lime); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+  .hero-tag span { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--lime); }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(80px,22vw,120px); line-height: 0.85; letter-spacing: 2px; }
+  .hero-title .line1 { color: #fff; display: block; }
+  .hero-title .line2 { color: var(--lime); display: block; text-shadow: 0 0 80px rgba(212,255,0,0.4); }
+  .hero-title .line3 { color: #fff; display: block; }
+
+  /* HOOK LINE */
+  .hero-hook {
+    margin-top: 20px;
+    font-size: 17px; font-weight: 700;
+    color: #aaa;
+    line-height: 1.5;
+    border-left: 3px solid var(--lime);
+    padding-left: 14px;
+  }
+  .hero-hook em { color: var(--lime); font-style: normal; }
+
+  /* FORM */
+  .form-card {
+    background: var(--s1); border: 1px solid var(--border);
+    border-radius: 24px; padding: 28px; margin-bottom: 12px;
+    position: relative; overflow: hidden;
+  }
+  .form-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,255,0,0.3), transparent);
+  }
+  .form-section-label {
+    font-size: 9px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+  }
+  .form-section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .input-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .input-label {
+    font-size: 9px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--muted); display: flex; justify-content: space-between; align-items: center;
+  }
+  .input-label .opt { color: var(--muted2); font-weight: 400; letter-spacing: 0; text-transform: none; font-size: 10px; }
+  .input-field {
+    background: var(--s2); border: 1px solid var(--border); border-radius: 14px;
+    padding: 14px 16px; color: var(--text); font-family: 'Syne', sans-serif;
+    font-size: 16px; font-weight: 700; outline: none; width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    -webkit-appearance: none; appearance: none;
+  }
+  .input-field::placeholder { color: #2a2a2e; font-weight: 400; }
+  .input-field:focus { border-color: rgba(212,255,0,0.4); box-shadow: 0 0 0 4px rgba(212,255,0,0.06); background: var(--s3); }
+  .input-field::-webkit-inner-spin-button, .input-field::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .input-field[type=number] { -moz-appearance: textfield; }
+  .input-field.error { border-color: #ff3a3a !important; box-shadow: 0 0 0 4px rgba(255,58,58,0.08) !important; }
+  .field-error { font-size: 10px; color: #ff3a3a; font-weight: 700; margin-top: 4px; letter-spacing: 0.3px; display: none; }
+  .field-error.show { display: block; }
+
+  /* VALIDATION BANNER */
+  .validation-banner {
+    background: rgba(255,58,58,0.08); border: 1px solid rgba(255,58,58,0.25);
+    border-radius: 14px; padding: 14px 16px; margin-bottom: 12px;
+    font-size: 13px; font-weight: 600; color: #ff6b6b; line-height: 1.6; display: none;
+  }
+  .validation-banner.show { display: block; }
+  .validation-banner strong { color: #ff3a3a; }
+
+  /* BUTTONS */
+  .btn-sample {
+    width: 100%; background: transparent; border: none;
+    padding: 10px; color: var(--muted2);
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s;
+    margin-top: 6px; text-decoration: underline; text-underline-offset: 3px;
+    text-decoration-color: #2a2a2a;
+  }
+  .btn-sample:hover { color: #666; text-decoration-color: #444; }
+  .btn-cta {
+    width: 100%; background: var(--lime); color: #060608;
+    font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px;
+    border: none; border-radius: 16px; padding: 20px; cursor: pointer;
+    position: relative; overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 0 rgba(212,255,0,0.3), 0 20px 60px rgba(212,255,0,0.15);
+  }
+  .btn-cta::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+    pointer-events: none;
+  }
+  .btn-cta:hover { transform: translateY(-3px); box-shadow: 0 7px 0 rgba(212,255,0,0.25), 0 30px 80px rgba(212,255,0,0.25); }
+  .btn-cta:active { transform: translateY(1px); }
+  @keyframes btnShake {
+    0%,100%{transform:translateY(0)} 20%{transform:translateX(-4px)} 40%{transform:translateX(4px)}
+    60%{transform:translateX(-3px)} 80%{transform:translateX(3px)}
+  }
+  .btn-shake { animation: btnShake 0.4s ease; }
+
+  /* TICKER */
+  .ticker { text-align: center; padding: 24px 0 8px; font-size: 12px; color: var(--muted2); font-style: italic; letter-spacing: 0.5px; min-height: 48px; transition: opacity 0.4s; }
+
+  /* RESULT */
+  @keyframes resultIn { 0%{opacity:0;transform:translateY(40px) scale(0.97)} 100%{opacity:1;transform:translateY(0) scale(1)} }
+  .result-wrap { margin-top: 32px; animation: resultIn 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+
+  /* VERDICT CARD */
+  .verdict-card { border-radius: 24px; margin-bottom: 12px; overflow: hidden; position: relative; }
+  .verdict-top { padding: 32px 28px 28px; }
+
+  /* BIG CATEGORY LABEL */
+  .verdict-big-cat {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 14vw, 72px);
+    line-height: 0.9; letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+  .verdict-blunt {
+    font-size: 16px; font-weight: 700; line-height: 1.5;
+    margin-bottom: 20px; opacity: 0.9;
+  }
+
+  /* SCORE ROW */
+  .verdict-score-row {
+    display: flex; align-items: flex-end; gap: 12px; margin-bottom: 18px;
+  }
+  .verdict-score-num { font-family: 'Bebas Neue', sans-serif; font-size: 72px; line-height: 0.85; }
+  .verdict-score-meta { padding-bottom: 6px; }
+  .verdict-score-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: 0.4; }
+
+  .verdict-bar-wrap { height: 3px; background: rgba(0,0,0,0.3); border-radius: 100px; overflow: hidden; margin-bottom: 24px; }
+  .verdict-bar-fill { height: 100%; border-radius: 100px; transition: width 1.4s cubic-bezier(0.22,1,0.36,1); }
+
+  /* NUMBERS SUMMARY */
+  .verdict-numbers {
+    background: rgba(0,0,0,0.2); border-radius: 12px;
+    padding: 14px 16px; font-size: 14px; line-height: 1.8; font-weight: 500;
+    color: rgba(255,255,255,0.5);
+  }
+  .verdict-numbers strong { color: #fff; font-weight: 700; }
+  .verdict-numbers .pos { font-weight: 800; }
+  .verdict-numbers .neg { font-weight: 800; }
+
+  .verdict-bottom {
+    padding: 16px 28px; display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(0,0,0,0.25); background: rgba(0,0,0,0.2);
+  }
+  .vb-label { font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; opacity: 0.4; }
+  .vb-val { font-size: 13px; font-weight: 700; }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .stat-box {
+    background: var(--s1); border: 1px solid var(--border);
+    border-radius: 18px; padding: 18px; position: relative; overflow: hidden;
+  }
+  .stat-box::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--line-col, rgba(255,255,255,0.1)), transparent);
+  }
+  .stat-label { font-size: 9px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 30px; line-height: 1; }
+  .stat-val.pos { color: #3ddc6e; }
+  .stat-val.neg { color: #ff3a3a; }
+  .stat-val.warn { color: #ffb020; }
+  .stat-sub { font-size: 10px; color: #444; margin-top: 7px; font-weight: 700; line-height: 1.5; }
+  .stat-sub .gap { color: #ff3a3a; }
+
+  /* ROADMAP */
+  .roadmap-box {
+    grid-column: 1/-1; background: var(--s1); border: 1px solid var(--border);
+    border-radius: 18px; padding: 22px; position: relative; overflow: hidden;
+  }
+  .roadmap-box::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, #ff3a3a, #ffb020, #3ddc6e); opacity: 0.6;
+  }
+  .roadmap-title {
+    font-size: 9px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
+  }
+  .roadmap-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .rmap-step { display: flex; gap: 14px; align-items: flex-start; }
+  .rmap-step + .rmap-step { margin-top: 16px; }
+  .rmap-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+  .rmap-text { font-size: 13px; line-height: 1.7; color: #666; font-weight: 500; }
+  .rmap-text strong { color: #ddd; font-weight: 700; }
+  .hi-red { color: #ff3a3a; font-weight: 800; }
+  .hi-orange { color: #ffb020; font-weight: 800; }
+  .hi-green { color: #3ddc6e; font-weight: 800; }
+  .rmap-total { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .rmap-total-label { font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .rmap-total-val { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--text); letter-spacing: 1px; }
+  .rmap-caveat { font-size: 10px; color: var(--muted2); margin-top: 2px; }
+
+  /* TRUTH LINE AFTER RESULT */
+  /* SHARE BAIT — truth line + question together */
+  .share-bait {
+    text-align: center; margin: 14px 0 12px;
+    background: var(--s1); border: 1px solid var(--border);
+    border-radius: 18px; padding: 20px;
+  }
+  .truth-line {
+    font-size: 11px; color: #444; font-style: italic;
+    letter-spacing: 1px; text-transform: uppercase;
+    font-weight: 700; margin-bottom: 10px;
+    transition: opacity 0.4s;
+  }
+  .share-bait-text {
+    font-size: 18px; font-weight: 800; color: #aaa;
+    line-height: 1.4;
+  }
+  .share-bait-text em { color: var(--lime); font-style: normal; }
+
+  /* SHARE BUTTON */
+  .btn-share {
+    width: 100%; background: var(--s1); border: 1px solid var(--border2);
+    border-radius: 16px; padding: 16px; color: var(--text);
+    font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .btn-share:hover { border-color: #444; background: var(--s2); }
+
+  /* CALLOUT FOOTER */
+  .callout-footer {
+    margin-top: 14px;
+    background: var(--s1); border: 1px solid var(--border);
+    border-radius: 18px; padding: 20px 22px;
+    text-align: center;
+  }
+  .callout-footer-main {
+    font-size: 15px; font-weight: 800; color: #aaa; margin-bottom: 4px;
+  }
+  .callout-footer-main em { color: var(--lime); font-style: normal; }
+  .callout-footer-sub {
+    font-size: 12px; color: var(--muted); font-weight: 500;
+  }
+
+  @media (max-width: 400px) {
+    .verdict-big-cat { font-size: 52px; }
+    .verdict-score-num { font-size: 56px; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .stat-val { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-tag">
+      <div class="hero-tag-dot"></div>
+      <span>Reality &gt; Delusion</span>
+    </div>
+    <div class="hero-title">
+      <span class="line1">Broke</span>
+      <span class="line2">or</span>
+      <span class="line3">Balling?</span>
+    </div>
+    <p class="hero-hook">Be honest. <em>Which one are you?</em></p>
+  </div>
+
+  <div class="form-card">
+    <div class="form-section-label">Your numbers</div>
+    <div class="input-grid">
+      <div class="input-wrap">
+        <label class="input-label">Monthly Income</label>
+        <input class="input-field" id="income" type="number" placeholder="5,200" inputmode="numeric" oninput="clearErr('income')"/>
+        <span class="field-error" id="err-income"></span>
+      </div>
+      <div class="input-wrap">
+        <label class="input-label">Monthly Expenses</label>
+        <input class="input-field" id="expenses" type="number" placeholder="4,100" inputmode="numeric" oninput="clearErr('expenses')"/>
+        <span class="field-error" id="err-expenses"></span>
+      </div>
+      <div class="input-wrap">
+        <label class="input-label">Current Savings</label>
+        <input class="input-field" id="savings" type="number" placeholder="8,500" inputmode="numeric" oninput="clearErr('savings')"/>
+        <span class="field-error" id="err-savings"></span>
+      </div>
+      <div class="input-wrap">
+        <label class="input-label">Current Debt</label>
+        <input class="input-field" id="debt" type="number" placeholder="12,000" inputmode="numeric" oninput="clearErr('debt')"/>
+        <span class="field-error" id="err-debt"></span>
+      </div>
+      <div class="input-wrap">
+        <label class="input-label">Monthly Savings <span class="opt">actually set aside</span></label>
+        <input class="input-field" id="monthlySavings" type="number" placeholder="300" inputmode="numeric" oninput="clearErr('monthlySavings')"/>
+        <span class="field-error" id="err-monthlySavings"></span>
+      </div>
+      <div class="input-wrap">
+        <label class="input-label">Savings Goal <span class="opt">optional</span></label>
+        <input class="input-field" id="goal" type="number" placeholder="25,000" inputmode="numeric"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="validation-banner" id="validationBanner"></div>
+  <button class="btn-cta" id="ctaBtn" onclick="calculate()">Check Yourself (Don't Get Mad)</button>
+  <button class="btn-sample" onclick="loadSample()">Just testing? Try sample data</button>
+
+  <div id="resultArea"></div>
+  <div class="ticker" id="ticker">"Reality &gt; Delusion."</div>
+
+</div>
+<script>
+// Bottom ticker -- brand stampy, rotates while filling out the form
+var TRUTHS = [
+  "No ads. No judgment. Just math.",
+  "Reality > Delusion.",
+  "Built for people who want the truth.",
+  "The numbers do not lie. People do.",
+  "Most people never check. You are.",
+  "Awareness is step one. Acting is step two.",
+  "Free. Honest. Uncomfortable.",
+];
+
+// Shown once inside the result card -- motivational/punchy
+var RESULT_TRUTHS = [
+  "Don't get mad at me. I just did the math.",
+  "If nothing changes, nothing changes.",
+  "You knew this already... I just confirmed it.",
+  "Delusion is free. The consequences are not.",
+];
+
+var CATS = {
+  "Broke": {
+    color:"#ff3a3a", glow:"rgba(255,58,58,0.35)",
+    bg:"linear-gradient(135deg,#1a0a0a 0%,#110505 100%)",
+    barBg:"rgba(255,58,58,0.15)",
+    blunt:"You are not drowning yet. But you are definitely taking on water.",
+    tone:"Respectfully... yeah. This is why it feels tight.",
+    sub:"The gap between income and expenses is a slow leak. Before anything else that has to close.",
+    emoji:"💀", range:"0-24"
+  },
+  "Holding On": {
+    color:"#ffb020", glow:"rgba(255,176,32,0.3)",
+    bg:"linear-gradient(135deg,#16110a 0%,#0e0a04 100%)",
+    barBg:"rgba(255,176,32,0.12)",
+    blunt:"Not drowning... but not really moving either.",
+    tone:"One bad month away from being seriously annoyed.",
+    sub:"There is something working here. Protect it. Cut one thing, save one more. Repeat.",
+    emoji:"😬", range:"25-49"
+  },
+  "Stable-ish": {
+    color:"#f5e030", glow:"rgba(245,224,48,0.25)",
+    bg:"linear-gradient(135deg,#141200 0%,#0d0c00 100%)",
+    barBg:"rgba(245,224,48,0.1)",
+    blunt:"Better than panic mode. But do not confuse stability with wealth.",
+    tone:"You have a floor. Most people do not. Now build walls.",
+    sub:"You have a foundation. Build on it intentionally. Stability without growth is just slow drift.",
+    emoji:"🤔", range:"50-74"
+  },
+  "Balling": {
+    color:"#3ddc6e", glow:"rgba(61,220,110,0.3)",
+    bg:"linear-gradient(135deg,#071510 0%,#030d07 100%)",
+    barBg:"rgba(61,220,110,0.12)",
+    blunt:"Okay. You are actually moving right. Do not get lazy now.",
+    tone:"Real wealth is built in the boring, consistent middle. You are there.",
+    sub:"Keep the discipline. The gap between stable and wealthy is just sustained intention.",
+    emoji:"🔥", range:"75-100"
+  }
+};
+
+var tidx = 0;
+setInterval(function() {
+  var el = document.getElementById('ticker');
+  if (!el) return;
+  el.style.opacity = '0';
+  setTimeout(function() {
+    tidx = (tidx + 1) % TRUTHS.length;
+    el.textContent = '"' + TRUTHS[tidx] + '"';
+    el.style.opacity = '1';
+  }, 300);
+}, 4500);
+
+function loadSample() {
+  document.getElementById('income').value = 5200;
+  document.getElementById('expenses').value = 4100;
+  document.getElementById('savings').value = 8500;
+  document.getElementById('debt').value = 12000;
+  document.getElementById('monthlySavings').value = 400;
+  document.getElementById('goal').value = 25000;
+}
+
+function fmtMoney(n) {
+  if (n == null || isNaN(n)) return '--';
+  var abs = Math.abs(n);
+  var sign = n < 0 ? '-' : '';
+  if (abs >= 1000000) return sign + '$' + (abs/1000000).toFixed(1) + 'M';
+  if (abs >= 1000) return sign + '$' + Math.round(abs).toLocaleString('en-US');
+  return sign + '$' + Math.round(abs);
+}
+
+function fmtTime(months) {
+  if (!months || months < 1) return 'less than a month';
+  if (months < 12) return months + ' month' + (months === 1 ? '' : 's');
+  var y = (months / 12).toFixed(1);
+  return y + ' year' + (parseFloat(y) === 1 ? '' : 's');
+}
+
+function animCount(el, target, dur, isMoney) {
+  var start = performance.now();
+  function tick(now) {
+    var p = Math.min((now - start) / dur, 1);
+    var ease = 1 - Math.pow(1 - p, 4);
+    var v = Math.round(target * ease);
+    el.textContent = isMoney ? fmtMoney(v) : v;
+    if (p < 1) requestAnimationFrame(tick);
+    else el.textContent = isMoney ? fmtMoney(target) : target;
+  }
+  requestAnimationFrame(tick);
+}
+
+function clearErr(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('error');
+  var err = document.getElementById('err-' + id);
+  if (err) { err.textContent = ''; err.classList.remove('show'); }
+  var banner = document.getElementById('validationBanner');
+  if (banner) banner.classList.remove('show');
+}
+
+function showErr(id, msg) {
+  var el = document.getElementById(id);
+  if (el) el.classList.add('error');
+  var err = document.getElementById('err-' + id);
+  if (err) { err.textContent = msg; err.classList.add('show'); }
+}
+
+function calculate() {
+  var inc  = parseFloat(document.getElementById('income').value);
+  var exp  = parseFloat(document.getElementById('expenses').value);
+  var sav  = parseFloat(document.getElementById('savings').value);
+  var dbt  = parseFloat(document.getElementById('debt').value);
+  var mSav = parseFloat(document.getElementById('monthlySavings').value);
+  var gol  = parseFloat(document.getElementById('goal').value) || 0;
+
+  ['income','expenses','savings','debt','monthlySavings'].forEach(function(id) { clearErr(id); });
+  var banner = document.getElementById('validationBanner');
+  var errors = [];
+
+  if (isNaN(inc) || inc <= 0) {
+    showErr('income', 'Add your monthly income'); errors.push('income');
+  } else if (inc > 10000000) {
+    showErr('income', 'That number looks off'); errors.push('income');
+  }
+  if (isNaN(exp) || exp < 0) {
+    showErr('expenses', 'Add your monthly expenses'); errors.push('expenses');
+  } else if (!isNaN(inc) && exp >= inc * 3) {
+    showErr('expenses', 'Expenses cannot be 3x your income -- double check this'); errors.push('expenses');
+  }
+  if (!isNaN(sav) && sav < 0) { showErr('savings', 'Savings cannot be negative'); errors.push('savings'); }
+  if (!isNaN(dbt) && dbt < 0) { showErr('debt', 'Debt cannot be negative'); errors.push('debt'); }
+  if (!isNaN(mSav) && mSav < 0) {
+    showErr('monthlySavings', 'Cannot save a negative amount'); errors.push('monthlySavings');
+  } else if (!isNaN(mSav) && !isNaN(inc) && mSav > inc) {
+    showErr('monthlySavings', 'Cannot save more than you earn'); errors.push('monthlySavings');
+  } else if (!isNaN(mSav) && !isNaN(exp) && !isNaN(inc) && mSav > (inc - exp)) {
+    showErr('monthlySavings', 'More than your leftover -- where is it coming from?'); errors.push('monthlySavings');
+  }
+
+  if (errors.length > 0) {
+    if (banner) { banner.innerHTML = '<strong>Hold on.</strong> Fix the highlighted fields and try again.'; banner.classList.add('show'); banner.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+    return;
+  }
+
+  inc  = inc  || 0;
+  exp  = exp  || 0;
+  sav  = isNaN(sav)  ? 0 : sav;
+  dbt  = isNaN(dbt)  ? 0 : dbt;
+  mSav = isNaN(mSav) ? 0 : mSav;
+
+  var leftover = inc - exp;
+  var buffer = sav / Math.max(exp, 1);
+  var debtRatio = dbt / Math.max(inc, 1);
+  var netWorth = sav - dbt;
+  var savingsRate = inc > 0 ? Math.round((mSav / inc) * 100) : 0;
+  var savingsGap = leftover - mSav;
+  var projRate = mSav > 0 ? mSav : leftover;
+
+  // SCORE
+  var pts = 0;
+  if (leftover <= 0) pts += 0; else if (leftover < 300) pts += 15; else if (leftover < 1000) pts += 30; else pts += 40;
+  if (buffer < 1) pts += 0; else if (buffer < 3) pts += 15; else if (buffer < 6) pts += 25; else pts += 35;
+  if (debtRatio > 1) pts += 0; else if (debtRatio >= 0.5) pts += 10; else if (debtRatio >= 0.2) pts += 20; else pts += 25;
+
+  var catName = pts <= 24 ? 'Broke' : pts <= 49 ? 'Holding On' : pts <= 74 ? 'Stable-ish' : 'Balling';
+  var c = CATS[catName];
+
+  // ROADMAP
+  var monthsDebtFree = null, monthsAfterDebt = null, totalMonths = null;
+  if (dbt > 0 && projRate > 0) monthsDebtFree = Math.ceil(dbt / projRate);
+  if (gol > 0 && projRate > 0) {
+    if (netWorth >= gol) {
+      totalMonths = 0;
+    } else if (dbt <= 0) {
+      totalMonths = Math.ceil(Math.max(gol - sav, 0) / projRate);
+    } else {
+      var savAtClear = sav + (monthsDebtFree * projRate) - dbt;
+      var rem = Math.max(gol - savAtClear, 0);
+      monthsAfterDebt = rem > 0 ? Math.ceil(rem / projRate) : 0;
+      totalMonths = monthsDebtFree + monthsAfterDebt;
+    }
+  }
+
+  var btn = document.getElementById('ctaBtn');
+  btn.classList.add('btn-shake');
+  setTimeout(function() { btn.classList.remove('btn-shake'); }, 450);
+
+  // Hide bottom ticker once results are showing -- it conflicts with the result truth line
+  var ticker = document.getElementById('ticker');
+  if (ticker) ticker.style.display = 'none';
+
+  var dtiClass = debtRatio < 0.2 ? 'pos' : debtRatio > 0.5 ? 'neg' : 'warn';
+  var dtiVal = inc > 0 ? Math.round(debtRatio * 100) + '%' : '--';
+
+  // SAVINGS SUB LINE
+  var savSubHTML = '';
+  if (mSav > 0 && leftover > 0) {
+    var gapColor = savingsGap > 0 ? '#ff3a3a' : '#3ddc6e';
+    var gapText = savingsGap > 0
+      ? fmtMoney(savingsGap) + ' unaccounted for'
+      : 'saving all of your leftover';
+    savSubHTML = '<div class="stat-sub">' + savingsRate + '% of income &nbsp;&middot;&nbsp; <span style="color:' + gapColor + '">' + gapText + '</span></div>';
+  }
+
+  // NUMBERS SUMMARY inside verdict card
+  var yearlySavings = projRate * 12;
+  var numsSummary = 'You have <strong>' + fmtMoney(leftover) + '</strong> left each month after expenses. '
+    + (mSav > 0
+        ? 'You are putting away <strong class="pos">' + fmtMoney(mSav) + '/mo</strong>, which adds up to <strong>' + fmtMoney(yearlySavings) + '/year</strong>.'
+        : 'At this pace you would save <strong>' + fmtMoney(leftover * 12) + '/year</strong> if all of it went to savings.')
+    + (dbt > 0 ? ' Net worth right now: <strong class="neg">' + fmtMoney(netWorth) + '</strong>.' : '');
+
+  // ROADMAP HTML
+  var roadmapHTML = '';
+  if (gol > 0 && projRate > 0) {
+    var stepsHTML = '';
+    if (netWorth >= gol) {
+      stepsHTML = '<p style="font-size:14px;color:#3ddc6e;font-weight:700;">You are already there. Net worth exceeds your goal.</p>';
+    } else {
+      if (dbt > 0) {
+        stepsHTML += '<div class="rmap-step">'
+          + '<div class="rmap-num" style="background:#ff3a3a;color:#000;">1</div>'
+          + '<div class="rmap-text"><strong>Clear ' + fmtMoney(dbt) + ' in debt</strong> -- at your current pace that is '
+          + '<span class="hi-orange">' + fmtTime(monthsDebtFree) + '</span>. '
+          + 'Until then, your net worth is <span class="hi-red">' + fmtMoney(netWorth) + '</span>.</div>'
+          + '</div>';
+      }
+      var step2num = dbt > 0 ? 2 : 1;
+      var step2txt = '';
+      if (dbt > 0) {
+        step2txt = monthsAfterDebt === 0
+          ? '<strong>Hit ' + fmtMoney(gol) + '</strong> -- you will already be past it after clearing debt.'
+          : '<strong>Then reach ' + fmtMoney(gol) + '</strong> -- takes another <span class="hi-green">' + fmtTime(monthsAfterDebt) + '</span> from there.';
+      } else {
+        step2txt = '<strong>Save to ' + fmtMoney(gol) + '</strong> -- you will get there in <span class="hi-green">' + fmtTime(totalMonths) + '</span>.';
+      }
+      stepsHTML += '<div class="rmap-step"><div class="rmap-num" style="background:#3ddc6e;color:#000;">' + step2num + '</div><div class="rmap-text">' + step2txt + '</div></div>';
+      if (dbt > 0) {
+        stepsHTML += '<div class="rmap-total"><div><div class="rmap-total-label">Total timeline</div><div class="rmap-caveat">if nothing changes</div></div><div class="rmap-total-val">' + fmtTime(totalMonths) + '</div></div>';
+      }
+    }
+    roadmapHTML = '<div class="roadmap-box"><div class="roadmap-title">Real Roadmap to ' + fmtMoney(gol) + '</div>' + stepsHTML + '</div>';
+  }
+
+  var savClass = mSav > 0 ? 'pos' : 'warn';
+  var rtIdx = Math.floor(Math.random() * RESULT_TRUTHS.length);
+
+  document.getElementById('resultArea').innerHTML =
+    '<div class="result-wrap" id="resultWrap">'
+
+    // VERDICT CARD
+    + '<div class="verdict-card" style="background:' + c.bg + ';border:1px solid rgba(255,255,255,0.07);box-shadow:0 0 100px ' + c.glow + ';">'
+    +   '<div class="verdict-top">'
+    +     '<div class="verdict-big-cat" style="color:' + c.color + ';text-shadow:0 0 60px ' + c.glow + ';">' + c.emoji + ' ' + catName.toUpperCase() + '</div>'
+    +     '<p class="verdict-blunt" style="color:' + c.color + '">' + c.blunt + '</p>'
+    +     '<div class="verdict-score-row">'
+    +       '<div class="verdict-score-num" style="color:' + c.color + ';" id="scoreEl">0</div>'
+    +       '<div class="verdict-score-meta">'
+    +         '<div class="verdict-score-label" style="color:' + c.color + '">Score</div>'
+    +         '<div style="font-size:13px;font-weight:700;color:' + c.color + '">' + c.range + ' range</div>'
+    +       '</div>'
+    +     '</div>'
+    +     '<div class="verdict-bar-wrap" style="background:' + c.barBg + '">'
+    +       '<div class="verdict-bar-fill" id="barFill" style="width:0%;background:' + c.color + '"></div>'
+    +     '</div>'
+    +     '<div class="verdict-numbers">' + numsSummary + '</div>'
+    +   '</div>'
+    +   '<div class="verdict-bottom">'
+    +     '<div><div class="vb-label" style="color:' + c.color + '">Verdict</div><div class="vb-val">' + c.tone + '</div></div>'
+    +   '</div>'
+    + '</div>'
+
+    // STATS
+    + '<div class="stats-grid">'
+    +   '<div class="stat-box" style="--line-col:rgba(255,255,255,0.08)">'
+    +     '<div class="stat-label">Monthly Leftover</div>'
+    +     '<div class="stat-val ' + (leftover >= 0 ? 'pos' : 'neg') + '" id="sLeft">--</div>'
+    +   '</div>'
+    +   '<div class="stat-box" style="--line-col:rgba(212,255,0,0.2)">'
+    +     '<div class="stat-label">Actually Saving</div>'
+    +     '<div class="stat-val ' + savClass + '" id="sMSav">--</div>'
+    +     savSubHTML
+    +   '</div>'
+    +   '<div class="stat-box" style="--line-col:rgba(255,58,58,0.2)">'
+    +     '<div class="stat-label">Net Worth</div>'
+    +     '<div class="stat-val ' + (netWorth >= 0 ? 'pos' : 'neg') + '" id="sNW">--</div>'
+    +   '</div>'
+    +   '<div class="stat-box" style="--line-col:rgba(255,176,32,0.2)">'
+    +     '<div class="stat-label">Debt / Income</div>'
+    +     '<div class="stat-val ' + dtiClass + '">' + dtiVal + '</div>'
+    +   '</div>'
+    +   roadmapHTML
+    + '</div>'
+
+    // TRUTH LINE
+    // SHARE BAIT
+    + '<div class="share-bait">'
+    +   '<div class="truth-line">"' + RESULT_TRUTHS[rtIdx] + '"</div>'
+    +   '<div class="share-bait-text">Be honest... <em>did this call you out?</em></div>'
+    + '</div>'
+
+    // SHARE BUTTON
+    + '<button class="btn-share" id="shareBtn" onclick="copyResult(' + pts + ',\'' + catName + '\',' + leftover + ',' + mSav + ',' + netWorth + ')">'
+    +   '<span>&#8599;</span><span id="shareLabel">Copy &amp; Share Your Result</span>'
+    + '</button>'
+
+    // CALLOUT FOOTER
+    + '<div class="callout-footer">'
+    +   '<div class="callout-footer-main">Most people avoid this. <em>You did not.</em></div>'
+    +   '<div class="callout-footer-sub">That is already more than most people do.</div>'
+    + '</div>'
+
+    + '</div>';
+
+  setTimeout(function() {
+    var bar = document.getElementById('barFill');
+    if (bar) bar.style.width = pts + '%';
+    var se = document.getElementById('scoreEl');
+    if (se) animCount(se, pts, 1000, false);
+    var sl = document.getElementById('sLeft');
+    if (sl) animCount(sl, leftover, 800, true);
+    var sm = document.getElementById('sMSav');
+    if (sm) animCount(sm, mSav > 0 ? mSav : 0, 750, true);
+    var sn = document.getElementById('sNW');
+    if (sn) animCount(sn, netWorth, 850, true);
+    var rw = document.getElementById('resultWrap');
+    if (rw) rw.scrollIntoView({behavior:'smooth',block:'start'});
+  }, 60);
+}
+
+function copyResult(score, catName, leftover, mSav, netWorth) {
+  var c = CATS[catName];
+  var savLine = mSav > 0 ? 'Actually saving: ' + fmtMoney(mSav) + '/mo' : 'Monthly leftover: ' + fmtMoney(leftover);
+  var text = [
+    'Broke or Balling? -- My Results',
+    '',
+    'Score: ' + score + '/100 -- ' + catName + ' ' + c.emoji,
+    savLine,
+    'Net worth: ' + fmtMoney(netWorth),
+    '',
+    '"' + c.blunt + '"',
+    '',
+    'Be honest... did this call you out?',
+    'Check yours at brokeorballing.com',
+    '#BrokeOrBalling #RealityCheck'
+  ].join('\n');
+  navigator.clipboard.writeText(text).then(function() {
+    var el = document.getElementById('shareLabel');
+    if (el) {
+      el.textContent = 'Copied -- go post it';
+      setTimeout(function() { el.textContent = 'Copy & Share Your Result'; }, 2500);
+    }
+  }).catch(function() {});
+}
+</script>
+</body>
+</html>
